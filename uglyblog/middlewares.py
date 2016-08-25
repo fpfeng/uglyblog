@@ -1,18 +1,18 @@
 import re
-import os
-import psutil
-import sys
+# import os
+# import psutil
+# import sys
 from time import time
-from operator import add
-from functools import reduce
-from django.db import connection
+# from operator import add
+# from functools import reduce
+# from django.db import connection
 from django.utils.deprecation import MiddlewareMixin
 
 
 class StatsMiddleware(MiddlewareMixin):
 
-    def process_request(self, request):
-        request._mem = psutil.Process(os.getpid()).memory_info()
+    # def process_request(self, request):
+    #     request._mem = psutil.Process(os.getpid()).memory_info()
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         '''
@@ -44,15 +44,15 @@ class StatsMiddleware(MiddlewareMixin):
         # and backout python time
         # python_time = total_time - db_time
 
-        mem = psutil.Process(os.getpid()).memory_info()
-        diff = mem.rss - request._mem.rss
+        # mem = psutil.Process(os.getpid()).memory_info()
+        # diff = mem.rss - request._mem.rss
 
         stats = {
             'total_time': total_time * 1000,
             # 'python_time': python_time * 1000,
             # 'db_time': db_time * 1000,
             # 'db_queries': db_queries,
-            'memory_use': diff / 1024
+            # 'memory_use': diff / 1024
         }
 
         # replace the comment if found
