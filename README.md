@@ -22,7 +22,7 @@ git clone
 export DJANGO_SETTINGS_MODULE="uglyblog.test_settings"             
 ./manage.py test blog                                                          
 ```
- 无误，`uglybog/dev_settings.py`同上，生成假数据
+ 无误，`uglybog/dev_settings.py`同上并修改七牛参数，生成假数据
 ```bash  
 export DJANGO_SETTINGS_MODULE="uglyblog.dev_settings"                  
 ./manage.py makemigrations blog          
