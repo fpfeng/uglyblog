@@ -1,0 +1,12 @@
+{% regroup post_list.all by create_date|date:'Y' as years %}
+<ul class="archive-year">
+	{% for y in years %}
+		<li><a class="theme-a" href="?year={{ y.grouper }}">{{ y.grouper }}年</a></li>
+		{% regroup y.list by create_date|date:'n' as months %}
+		{% for m in months %}
+		<ul class="archive-month">
+			<li><a class="theme-a" href="?month={{ y.grouper }}{{ m.grouper }}">{{ m.grouper }}月 ({{ m.list|length }})</a></li>
+		</ul>
+			{% endfor %}
+	{% endfor %}
+</ul>

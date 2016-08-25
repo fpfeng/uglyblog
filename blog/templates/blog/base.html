@@ -1,0 +1,97 @@
+{% load static %}
+{% load blog_extras %}
+<!DOCTYPE html>
+<html>
+	<head>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    {% block more_style %}{% endblock %}
+    <script src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {# <script src="//cdn.bootcss.com/jqBootstrapValidation/1.3.7/jqBootstrapValidation.min.js"></script> #}
+    {% if request.resolver_match.url_name != 'edit_post' %}
+        <script src="{% static 'blog/js/clean-blog.js' %}"></script>
+    {% endif %}
+    <link href="{% static 'blog/t.css' %}" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'blog/favicon.png' %}">
+    {% block more_script %}{% endblock %}
+		<title>
+			{% block title %}{% app_conf 'BLOG_TITLE' %}{% endblock %}
+		</title>
+		{% block header %}{% endblock %}
+	</head>
+	<body data-spy="scroll" data-target="#toc">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="#">{% app_conf 'BLOG_BRAND' %}</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/blog/">Index</a>
+                    </li>
+                    <li>
+                        <a href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+    {% with name=request.resolver_match.url_name %}
+        <header class="intro-header" style="background-image: url('{% if 'post' in name and 'new' not in name %}{{ post.header_image_url }}{% else %}{% header_image_url name %}{% endif %}')">
+    {% endwith %}
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        {% block heading %}
+                            {% if heading_text %}
+                                <h1 data-toc-skip>{{ heading_text }}</h1>
+                            {% else %}
+                                <h1 data-toc-skip>{% app_conf 'BLOG_TITLE' %}</h1>
+                            {% endif %}
+                        <hr class="small">
+                          {% if subheading_text %}
+                            <span class="subheading">{{ subheading_text }}</span>
+                          {% else %}
+                            <span class="subheading">{% app_conf 'BLOG_SUBTITLE' %}</span>
+                          {% endif %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+	{% block content %}{% endblock %}
+        <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                        <li>
+                            <a href="https://github.com/fpfeng/uglyblog">
+                                <span class="fa-stack">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <p class="copyright text-muted">made by <a class="text-muted" href="https://djangoproject.com"> ♥ Django</a> | theme: <a class="text-muted" href="https://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a><br><!-- STATS: py: %(total_time).0fms mem: %(memory_use).0fmb ENDSTATS --></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+	</body>
+</html>

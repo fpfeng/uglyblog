@@ -1,0 +1,41 @@
+{% extends 'blog/base.html' %}
+{% load filters %}
+{% block header %}
+    <style>
+		@media only screen and (min-width: 768px) {
+			.intro-header .site-heading {
+				padding: 0;
+			}
+		}
+
+		.intro-header .site-heading {
+			padding: 0;
+		}
+    </style>
+{% endblock %}
+{% block title %}登录 - {{ block.super }}{% endblock %}
+{% block content %}
+	<div class="container">
+		<div class="col-md-4 col-md-offset-4">
+			<div class="panel panel-default">
+				<div class="panel-heading"></div>
+				<div class="panel-body">
+				<form role="form" action="" method="post">
+					{% csrf_token %}
+					<input name="next" type="hidden" value="/blog/">
+					{% for f in form %}
+						{% if f.name != 'captcha' %}
+							<div class="form-group">
+							 {{ f|addpl:f.name |addcls:'form-control' }}
+							 </div>
+						{% else %}
+							{{ f }}
+						{% endif %}
+					{% endfor %}
+					<button class="btn btn-success" type="submit">登录</button>
+				</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'blog/base.html' %}
+{% block more_style %}
+	<link href="//cdn.bootcss.com/highlight.js/9.6.0/styles/atom-one-dark.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://oc6029ro6.qnssl.com/static/css/bootstrap-toc.min.v0.4.1.css">
+{% endblock %}
+{% block more_script %}
+	<script src="//cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="https://oc6029ro6.qnssl.com/static/js/bootstrap-toc.min.v0.4.1.js"></script>
+{% endblock %}
+{% block title %}{{ post.title }} - {{ block.super }}{% endblock %}
+{% block heading %}
+	{% with heading_text=post.title subheading_text=post.subtitle %}
+		{{ block.super }}
+	{% endwith %}
+{% endblock %}
+{% block content %}
+	<style>
+		nav[data-toggle=toc] .nav > li > a {
+			font-size: 16px;
+		}
+		nav[data-toggle=toc] .nav .nav > li > a {
+			font-size: 14px;
+		}
+	</style>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-1">
+				<article class="markdown">{{ post.content_html|safe }}</article>
+				<hr>
+				<div class="post-info">
+					<span>标签：</span>
+					{% for t in post.tags.all %}
+					<a class="post-tag" href="{% url 'blog:index' %}?tag={{ t }}">{{ t }}</a>
+					{% endfor %}<br>
+					<span>分类：</span><a class="theme-a" href="{% url 'blog:index' %}?category={{ post.category.name }}" style="font-size: 16px;">{{ post.category.name }}</a><br>
+					<span class="post-meta">发表时间： </span><span style="vertical-align: middle;">{{ post.create_date|date:'Y-m-d G:i' }}</span>
+					{% if user.is_authenticated %}
+						<a class="theme-a text-danger" style="font-size: 16px; vertical-align: middle;" href="{% url 'blog:edit_post' post.id %}">编辑文章</a>
+					{% endif %}
+				</div>
+			</div>
+			<!-- sidebar, which will move to the top on a small screen -->
+			<div class="col-sm-3">
+				<nav id="toc" data-spy="affix" data-toggle="toc"></nav>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+

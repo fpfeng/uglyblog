@@ -1,0 +1,5 @@
+<ul class="category-list">
+	{% for c in category_list.all %}
+		<li class="category-item"><a class="theme-a" href="?category={{ c.name }}">{{ c.name }} ({{ c.post_set.count }})</a></li>
+	{% endfor %}
+</ul>
