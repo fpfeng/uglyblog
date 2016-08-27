@@ -505,7 +505,7 @@ body {
 
 .edit-toolbar > ul > li > a.active-switch, .edit-toolbar > ul > li > a:hover {
   color: black;
-  background: #777;
+  background: #eee;
 }
 
 .edit-toolbar > ul > li > a {
@@ -581,21 +581,19 @@ body {
 
 .category-list {
     padding: 0;
-    list-style-type: none;
 }
 
 .category-item > a {
+  margin-left: 20px;
   font-size: 17px;
 }
 
 .archive-year {
   font-size: 17px;
-  padding: 0;
-  list-style-type: none;
 }
 
 .archive-month {
-  padding-left: 16px;
+  /*text-align: right;*/
   list-style-type: none;
 }
 

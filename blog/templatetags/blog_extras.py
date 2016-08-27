@@ -6,6 +6,11 @@ from blog.models import Post, Category
 register = template.Library()
 
 
+@register.filter(name='times')
+def times(number):
+    return range(number)
+
+
 @register.simple_tag
 def app_conf(name):
     return getattr(settings, name, '')
