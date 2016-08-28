@@ -5,6 +5,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseNotFound, \
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from registration.backends.simple.views import RegistrationView
 from django.urls import reverse
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from django.contrib.auth.decorators import login_required
@@ -121,4 +122,4 @@ def generate_qiniu_key(request):
 
 class MyRegistrationView(RegistrationView):
     def get_success_url(self, user):
-        return '/blog/'
+        return getattr(settings, 'LOGIN_REDIRECT_URL', '/blog')
