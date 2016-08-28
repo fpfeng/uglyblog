@@ -22,7 +22,6 @@
 				<div class="panel-body">
 				<form role="form" action="" method="post">
 					{% csrf_token %}
-					<input name="next" type="hidden" value="/blog/">
 					{% for f in form %}
 						{% if f.name != 'captcha' %}
 							<div class="form-group">
