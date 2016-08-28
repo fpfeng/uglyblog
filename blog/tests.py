@@ -1,9 +1,10 @@
 # coding: utf-8
 from datetime import datetime
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.conf import settings
 from django.contrib.auth.models import User, Permission
+from captcha.models import CaptchaStore
 from .models import Category, Post
 
 
@@ -27,11 +28,7 @@ class BaseSetup(TestCase):
                         })
 
     def login(self):
-        self.client.post(reverse('login'),
-                         {
-                            'username': self.username,
-                            'password': self.password,
-                        })
+        self.client.login(username=self.username, password=self.password)
 
     def logout(self):
         self.client.get(reverse('logout'))
@@ -274,3 +271,18 @@ class TestView(BaseSetup):
                                HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertContains(resp, 'key')
         self.assertContains(resp, 'image_url')
+
+    def test_login_logout_redirect(self):
+        self.add_user()
+        resp = self.client.post(reverse('logout'))
+        self.assertRedirects(resp, reverse('blog:index'))
+
+        captcha = CaptchaStore.objects.get(hashkey=CaptchaStore.generate_key())
+        resp = self.client.post(reverse('login'), {
+                            'csrfmiddlewaretoken': 'csrfmiddlewaretoken',
+                            'username': self.username,
+                            'password': self.password,
+                            'captcha_0': captcha.hashkey,
+                            'captcha_1': captcha.response,
+                            })
+        self.assertRedirects(resp, reverse('blog:index'))
