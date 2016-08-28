@@ -1,5 +1,6 @@
 import inspect
 from django.core.management.base import BaseCommand, CommandError
+from django.contrib.auth.models import User
 from django.conf import settings
 from taggit.managers import TaggableManager
 from faker import Factory
@@ -51,4 +52,9 @@ class Command(BaseCommand):
             p.create_date = orginal.replace(year=randint(2013, 2015),
                                             month=randint(1, 12))
             p.save()
+
+        user = User.objects.create_user('demouser', password='demouser')
+        user.save()
+
         self.stdout.write(self.style.SUCCESS('done!'))
+        self.stdout.write(self.style.SUCCESS('username as password: demouser'))
