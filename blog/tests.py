@@ -76,6 +76,15 @@ class BaseSetup(TestCase):
     def get_index(self):
         return self.client.get(reverse('blog:index'))
 
+    def manual_login_data(self, captcha):
+        return {
+            'csrfmiddlewaretoken': 'csrfmiddlewaretoken',
+            'username': self.username,
+            'password': self.password,
+            'captcha_0': captcha.hashkey,
+            'captcha_1': captcha.response,
+        }
+
 
 class TestAjaxApi(BaseSetup):
 
@@ -278,11 +287,20 @@ class TestView(BaseSetup):
         self.assertRedirects(resp, reverse('blog:index'))
 
         captcha = CaptchaStore.objects.get(hashkey=CaptchaStore.generate_key())
-        resp = self.client.post(reverse('login'), {
-                            'csrfmiddlewaretoken': 'csrfmiddlewaretoken',
-                            'username': self.username,
-                            'password': self.password,
-                            'captcha_0': captcha.hashkey,
-                            'captcha_1': captcha.response,
-                            })
+        resp = self.client.post(reverse('login'), self.manual_login_data(captcha))
         self.assertRedirects(resp, reverse('blog:index'))
+
+    def test_login_error_message(self):
+        self.add_user()
+        resp = self.client.post(reverse('logout'))
+        captcha = CaptchaStore.objects.get(hashkey=CaptchaStore.generate_key())
+        data = self.manual_login_data(captcha)
+        data['password'] = 'worng'
+        resp = self.client.post(reverse('login'), data, follow=True)
+        self.assertContains(resp, u'用户名或密码错误')
+
+        captcha = CaptchaStore.objects.get(hashkey=CaptchaStore.generate_key())
+        data = self.manual_login_data(captcha)
+        data['captcha_1'] = 'worng'
+        resp = self.client.post(reverse('login'), data, follow=True)
+        self.assertContains(resp, u'验证码错误')
