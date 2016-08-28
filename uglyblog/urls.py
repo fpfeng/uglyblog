@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.conf import settings
 from django.contrib.auth.views import login, logout
 from blog.views import MyRegistrationView
 from blog.forms import NewRegisterForm, LoginForm
@@ -30,7 +31,8 @@ urlpatterns = [
         login,
         {'authentication_form': LoginForm},
         name='login'),
-    url(r'^blog/accounts/logout/$', logout, {'next_page': '/blog/'}, name='logout'),
+    url(r'^blog/accounts/logout/$', logout,
+        {'next_page': settings.LOGIN_REDIRECT_URL}, name='logout'),
     url(r'^blog/accounts/', include('registration.backends.simple.urls')),
     url(r'^blog/admin/', admin.site.urls),
     url(r'^blog/', include('blog.urls')),
