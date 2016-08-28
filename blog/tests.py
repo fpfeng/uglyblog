@@ -261,3 +261,9 @@ class TestView(BaseSetup):
         with self.settings(REGISTRATION_OPEN=False):
             resp = self.client.get(reverse('registration_register'), follow=True)
             self.assertNotContains(resp, u'再次输入密码')
+
+    def test_refresh_captcha(self):
+        resp = self.client.get(reverse('captcha-refresh'),
+                               HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertContains(resp, 'key')
+        self.assertContains(resp, 'image_url')
