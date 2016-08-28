@@ -111,6 +111,13 @@ class TestAjaxApi(BaseSetup):
         resp = self.client.get(reverse('blog:gen_qtoken'))
         self.assertContains(resp, 'uptoken')
 
+    def test_qiniu_key(self):
+        self.add_user()
+        self.login()
+
+        resp = self.client.get(reverse('blog:gen_qkey'))
+        self.assertContains(resp, 'key')
+
 
 class TestView(BaseSetup):
 

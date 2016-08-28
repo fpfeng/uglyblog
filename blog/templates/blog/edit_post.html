@@ -77,7 +77,7 @@
 				<div class="form-group">
 					<div class="tag-fake-input">
 						{{ form.tags }}
-						<input class="tag-follow-input" type="text" placeholder="必须使用逗号 , 分号 ; 分隔生成">
+						<input class="tag-follow-input" type="text" placeholder="标签必须使用逗号 , 分号 ; 分隔生成">
 					</div>
 				</div>
 				<div class="input-group form-group">
@@ -124,9 +124,9 @@
 			    uptoken_url: '{% url 'blog:gen_qtoken' %}',  // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
 			    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
 			    unique_names: false,          
-			    domain: 'https://oc6029ro6.qnssl.com/',     // bucket域名，下载资源时用到，必需
+			    domain: '{% app_conf 'QINIU_BASE_URL' %}',     // bucket域名，下载资源时用到，必需
 			    container: 'upload-img',             // 上传区域DOM ID，默认是browser_button的父元素
-			    max_file_size: '100mb',             // 最大文件体积限制
+			    max_file_size: '3mb',             // 最大文件体积限制
 			    flash_swf_url: "{% static 'blog/images/Moxie.swf' %}",  //引入flash，相对路径
 			    max_retries: 3,                     // 上传失败最大重试次数
 			    dragdrop: true,                     // 开启可拖曳上传
@@ -166,10 +166,16 @@
 			               //队列文件处理完毕后，处理相关的事情
 			        },
 			        'Key': function(up, file) {
-			            // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
-			            // 该配置必须要在unique_names: false，save_key: false时才生效
-
-			            var key = 'image/' + todayDate() + '/' + file.name;
+		                  $.ajax({
+		                  url: '{% url 'blog:gen_qkey' %}',
+		                  type: 'GET',
+		                  async: false,
+		                  success: function(data) {
+		                      var ext = Qiniu.getFileExtension(file.name);
+		                      key = 'attachment/' + todayDate() + '/' + data.key + '.' + ext;
+		                    },
+		                  cache: false
+		                  });
 			            return key
 			        }
 			    }
@@ -181,9 +187,9 @@
 			    uptoken_url: '{% url 'blog:gen_qtoken' %}',  // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
 			    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
 			    unique_names: false,          
-			    domain: 'https://oc6029ro6.qnssl.com/',     // bucket域名，下载资源时用到，必需
+			    domain: '{% app_conf 'QINIU_BASE_URL' %}',     // bucket域名，下载资源时用到，必需
 			    container: 'upload-bg',             // 上传区域DOM ID，默认是browser_button的父元素
-			    max_file_size: '100mb',             // 最大文件体积限制
+			    max_file_size: '3mb',             // 最大文件体积限制
 			    flash_swf_url: "{% static 'blog/images/Moxie.swf' %}",  //引入flash，相对路径
 			    max_retries: 3,                     // 上传失败最大重试次数
 			    dragdrop: true,                     // 开启可拖曳上传
@@ -217,13 +223,16 @@
 			               //队列文件处理完毕后，处理相关的事情
 			        },
 			        'Key': function(up, file) {
-			            // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
-			            // 该配置必须要在unique_names: false，save_key: false时才生效
-
-			            var key = 'image/header-bg/' + file.name;
-			            console.log(key);
-
-			            // do something with key here
+		                  $.ajax({
+		                  url: '{% url 'blog:gen_qkey' %}',
+		                  type: 'GET',
+		                  async: false,
+		                  success: function(data) {
+		                      var ext = Qiniu.getFileExtension(file.name);
+		                      key = 'header-bg/' + todayDate() + '/' + data.key + '.' + ext;
+		                    },
+		                  cache: false
+		                  });
 			            return key
 			        }
 			    }

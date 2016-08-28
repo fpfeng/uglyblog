@@ -1,4 +1,5 @@
 # coding=utf-8
+import uuid
 from django.http import HttpResponse, JsonResponse, HttpResponseNotFound, \
     HttpResponseForbidden
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -111,6 +112,11 @@ def preview_post(request):
 @login_required()
 def generate_qiniu_token(request):
     return JsonResponse({'uptoken': get_token()})
+
+
+@login_required()
+def generate_qiniu_key(request):
+    return JsonResponse({'key': uuid.uuid4().hex})
 
 
 class MyRegistrationView(RegistrationView):
