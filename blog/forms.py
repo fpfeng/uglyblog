@@ -37,6 +37,7 @@ class NewRegisterForm(RegistrationForm):
 
 
 class EditPostForm(ModelForm):
+
     class Meta:
         model = Post
         fields = [
@@ -56,6 +57,7 @@ class EditPostForm(ModelForm):
                                    'placeholder': u'副标题',
                                    'class': 'form-control'}),
             'tags': TagWidget(attrs={
+                              'placeholder': u'使用分号 ; 逗号 , 分隔',
                               'class': 'tag-real-input'}),
             'header_image_url': TextInput(attrs={
                                           'id': 'bg-image-url',

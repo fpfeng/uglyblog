@@ -77,7 +77,7 @@
 				<div class="form-group">
 					<div class="tag-fake-input">
 						{{ form.tags }}
-						<input class="tag-follow-input" type="text" placeholder="标签">
+						<input class="tag-follow-input" type="text" placeholder="必须使用逗号 , 分号 ; 分隔生成">
 					</div>
 				</div>
 				<div class="input-group form-group">
@@ -86,7 +86,7 @@
 					</span>
 						{{ form.header_image_url }} 
 					<span class="input-group-btn">
-						<button class="btn btn-warning" id="open-bg-image" type="button">查看</button>
+						<button class="btn btn-warning" id="open-bg-image" disabled type="button">查看</button>
 					</span>
 				</div>
 				<div class="edit-toolbar">
@@ -157,7 +157,7 @@
 			               var res = $.parseJSON(info);
 			               var sourceLink = domain + res.key; //获取上传成功后的文件的Url
 			               insertText('\n![](' + sourceLink + ')\n');
-			               console.log(sourceLink);
+			               // console.log(sourceLink);
 			        },
 			        'Error': function(up, err, errTip) {
 			               //上传出错时，处理相关的事情
@@ -206,7 +206,8 @@
 			               var domain = up.getOption('domain');
 			               var res = $.parseJSON(info);
 			               var sourceLink = domain + res.key; //获取上传成功后的文件的Url
-			               console.log(sourceLink);
+			               // console.log(sourceLink);
+			               $('#open-bg-image').prop('disabled', false);
 			               $('#bg-image-url').val(sourceLink);
 			        },
 			        'Error': function(up, err, errTip) {
@@ -261,7 +262,9 @@
 		}
 
 		$('#id_category').children('option').each(function() {
+			if (this.value != '') {
 			$('<li><a class="category-item" href="#category" value="' + this.value + '">' + this.text + '</a></li>').insertBefore('#category-divider');
+			}
 		});
 
 		$(".category-item").click(function() {
