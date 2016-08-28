@@ -29,13 +29,9 @@ def header_image_url(url_name):
 
 @register.inclusion_tag('blog/snippets/form_wrap_div.html')
 def wrap_div(form, div_class='', form_class='', placeholder=''):
-    if form_class:
-        form_class += ' form-control'
-    else:
+    if not form_class:
         form_class = 'form-control'
-    if div_class:
-        div_class += ' form-group'
-    else:
+    if not div_class:
         div_class = 'form-group'
     return {
             'form': form,

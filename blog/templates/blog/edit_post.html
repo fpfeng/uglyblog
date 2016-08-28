@@ -54,7 +54,7 @@
 			<div class="panel-body">
 			<form role="form" action="" method="post">
 				{% csrf_token %}
-				{% wrap_div form=form.category div_class='hide-category' %}
+				{{ form.category }}
 				<div class="form-group">
 					<div class="row">
 						<div class="col-lg-7">
@@ -118,67 +118,70 @@
 	</div>
 	<script>
 		$(document).ready(function() {
-				var uploader = Qiniu.uploader({
-			    runtimes: 'html5,flash,html4',      // 上传模式，依次退化
-			    browse_button: 'pickfile',         // 上传选择的点选按钮，必需
-			    uptoken_url: '{% url 'blog:gen_qtoken' %}',  // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
-			    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
-			    unique_names: false,          
-			    domain: '{% app_conf 'QINIU_BASE_URL' %}',     // bucket域名，下载资源时用到，必需
-			    container: 'upload-img',             // 上传区域DOM ID，默认是browser_button的父元素
-			    max_file_size: '3mb',             // 最大文件体积限制
-			    flash_swf_url: "{% static 'blog/images/Moxie.swf' %}",  //引入flash，相对路径
-			    max_retries: 3,                     // 上传失败最大重试次数
-			    dragdrop: true,                     // 开启可拖曳上传
-			    drop_element: 'id_content',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
-			    chunk_size: '4mb',                  // 分块上传时，每块的体积
-			    auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
-			    init: {
-			        'FilesAdded': function(up, files) {
-			            plupload.each(files, function(file) {
-			                // 文件添加进队列后，处理相关的事情
-			            });
-			        },
-			        'BeforeUpload': function(up, file) {
-			               // 每个文件上传前，处理相关的事情
-			        },
-			        'UploadProgress': function(up, file) {
-			               // 每个文件上传时，处理相关的事情
-			        },
-			        'FileUploaded': function(up, file, info) {
-			               // 每个文件上传成功后，处理相关的事情
-			               // 其中info是文件上传成功后，服务端返回的json，形式如：
-			               // {
-			               //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
-			               //    "key": "gogopher.jpg"
-			               //  }
-			               // 查看简单反馈
-			               var domain = up.getOption('domain');
-			               var res = $.parseJSON(info);
-			               var sourceLink = domain + res.key; //获取上传成功后的文件的Url
-			               insertText('\n![](' + sourceLink + ')\n');
-			               // console.log(sourceLink);
-			        },
-			        'Error': function(up, err, errTip) {
-			               //上传出错时，处理相关的事情
-			        },
-			        'UploadComplete': function() {
-			               //队列文件处理完毕后，处理相关的事情
-			        },
-			        'Key': function(up, file) {
-		                  $.ajax({
-		                  url: '{% url 'blog:gen_qkey' %}',
-		                  type: 'GET',
-		                  async: false,
-		                  success: function(data) {
-		                      var ext = Qiniu.getFileExtension(file.name);
-		                      key = 'attachment/' + todayDate() + '/' + data.key + '.' + ext;
-		                    },
-		                  cache: false
-		                  });
-			            return key
-			        }
-			    }
+			$('#id_category').prop('required', false);
+			$('#id_tags').prop('required', false);
+
+			var uploader = Qiniu.uploader({
+		    runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+		    browse_button: 'pickfile',         // 上传选择的点选按钮，必需
+		    uptoken_url: '{% url 'blog:gen_qtoken' %}',  // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
+		    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+		    unique_names: false,          
+		    domain: '{% app_conf 'QINIU_BASE_URL' %}',     // bucket域名，下载资源时用到，必需
+		    container: 'upload-img',             // 上传区域DOM ID，默认是browser_button的父元素
+		    max_file_size: '3mb',             // 最大文件体积限制
+		    flash_swf_url: "{% static 'blog/images/Moxie.swf' %}",  //引入flash，相对路径
+		    max_retries: 3,                     // 上传失败最大重试次数
+		    dragdrop: true,                     // 开启可拖曳上传
+		    drop_element: 'id_content',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+		    chunk_size: '4mb',                  // 分块上传时，每块的体积
+		    auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+		    init: {
+		        'FilesAdded': function(up, files) {
+		            plupload.each(files, function(file) {
+		                // 文件添加进队列后，处理相关的事情
+		            });
+		        },
+		        'BeforeUpload': function(up, file) {
+		               // 每个文件上传前，处理相关的事情
+		        },
+		        'UploadProgress': function(up, file) {
+		               // 每个文件上传时，处理相关的事情
+		        },
+		        'FileUploaded': function(up, file, info) {
+		               // 每个文件上传成功后，处理相关的事情
+		               // 其中info是文件上传成功后，服务端返回的json，形式如：
+		               // {
+		               //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
+		               //    "key": "gogopher.jpg"
+		               //  }
+		               // 查看简单反馈
+		               var domain = up.getOption('domain');
+		               var res = $.parseJSON(info);
+		               var sourceLink = domain + res.key; //获取上传成功后的文件的Url
+		               insertText('\n![](' + sourceLink + ')\n');
+		               // console.log(sourceLink);
+		        },
+		        'Error': function(up, err, errTip) {
+		               //上传出错时，处理相关的事情
+		        },
+		        'UploadComplete': function() {
+		               //队列文件处理完毕后，处理相关的事情
+		        },
+		        'Key': function(up, file) {
+	                  $.ajax({
+	                  url: '{% url 'blog:gen_qkey' %}',
+	                  type: 'GET',
+	                  async: false,
+	                  success: function(data) {
+	                      var ext = Qiniu.getFileExtension(file.name);
+	                      key = 'attachment/' + todayDate() + '/' + data.key + '.' + ext;
+	                    },
+	                  cache: false
+	                  });
+		            return key
+		        }
+		    }
 			});
 			var Qiniu2 = new QiniuJsSDK();
 			var uploader2 = Qiniu2.uploader({
@@ -246,7 +249,7 @@
 			}
 			
 			if (tags.length > 0) {
-				var selectedCategory = $('.hide-category').find(':selected');
+				var selectedCategory = $('#id_category').find(':selected');
 				setCategory($(selectedCategory).text(), $(selectedCategory).val());
 			}
 		});
@@ -403,10 +406,19 @@
 			$('.tag-text').each(function() {
 				output += '"' + $(this).text() + '" ';
 			});
+			if (output.length == 0) {
+				output = 'you_forgot_here';
+				insertTag(output);
+				$('.tag-follow-input').val('');
+			}
 			$('.tag-real-input').val(output);
 		});
 
 		$(document).on('click', '.remove-tag-item', function(e) {
+			var fakeTag = $(this).siblings('.tag-text').text();
+			var withComma = '"' + fakeTag + '"';
+			var newTags = $('#id_tags').val().replace(withComma, '').replace(fakeTag, '');
+			$('#id_tags').val(newTags);
 			$(this).parent().remove();
 		});
 
@@ -438,6 +450,25 @@
 					console.log(xhr.status + ": " + xhr.responseText);
 				}
 			});
+		});
+
+		function blinkElement(e) {
+			e.fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+		}
+
+		$('form').submit(function() {
+			var category = $('#id_category').val();
+			var tag = $('#id_tags').val();
+			if (category === '') {
+				$(window).scrollTop(0);
+				blinkElement($('#select-category-btn'));
+				return false;
+			}
+			if (tag === '') {
+				$(window).scrollTop(0);
+				blinkElement($('.tag-follow-input'));
+				return false;
+			}
 		});
 	</script>
 {% endblock %}

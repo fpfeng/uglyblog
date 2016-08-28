@@ -624,3 +624,7 @@ body {
   padding: 2px 5px;
   margin-bottom: 10px;
 }
+
+#id_category {
+  display: none;
+}
