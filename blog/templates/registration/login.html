@@ -22,6 +22,18 @@
 				<div class="panel-body">
 				<form role="form" action="" method="post">
 					{% csrf_token %}
+					{% if form.non_field_errors %}
+						<div class="alert alert-danger login-alert">
+						<button type="button" class="close" data-dismiss="alert">×</button>
+							用户名或密码错误
+						</div>
+					{% endif %}
+					{% if form.errors.captcha %}
+						<div class="alert alert-danger login-alert">
+						<button type="button" class="close" data-dismiss="alert">×</button>
+							验证码错误
+						</div>
+					{% endif %}
 					{% for f in form %}
 						{% if f.name != 'captcha' %}
 							<div class="form-group">
@@ -31,6 +43,7 @@
 							{{ f }}
 						{% endif %}
 					{% endfor %}
+
 					<button class="btn btn-success" type="submit">登录</button>
 				</form>
 				</div>

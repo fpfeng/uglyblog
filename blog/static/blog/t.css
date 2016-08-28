@@ -618,3 +618,9 @@ body {
 .index-account-a {
   font-size: 17px;
 }
+
+.login-alert {
+  font-size: 14px;
+  padding: 2px 5px;
+  margin-bottom: 10px;
+}

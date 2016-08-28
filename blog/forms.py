@@ -10,12 +10,22 @@ from blog.models import Post
 
 UserModel = get_user_model
 
+form_error = {
+    'required': u'不能为空',
+    'invalid': u'无效输入'
+}
+
 
 class LoginForm(AuthenticationForm):
     captcha = CaptchaField()
 
     class Meta:
         fields = ['username', 'password', 'captcha']
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        for k in self.fields.keys():
+            self.fields[k].error_messages = form_error
 
 
 class NewRegisterForm(RegistrationForm):
@@ -34,6 +44,7 @@ class NewRegisterForm(RegistrationForm):
             self.fields[k].help_text = ''
             self.fields[k].widget.attrs['class'] = 'form-control'
             self.fields[k].widget.attrs['placeholder'] = names[k]
+            self.fields[k].error_messages = form_error
 
 
 class EditPostForm(ModelForm):
