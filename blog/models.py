@@ -21,7 +21,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     header_image_url = models.CharField(max_length=100, blank=True)
     tags = TaggableManager()
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=50, unique=True)
     subtitle = models.CharField(max_length=50)
     content = models.TextField()
     content_html = models.TextField()
