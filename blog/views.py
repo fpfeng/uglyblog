@@ -48,11 +48,17 @@ def index(request):
     return render(request, 'blog/index.html', context)
 
 
-def single_post(request, post_title):
-    post = get_object_or_404(Post, title=post_title)
-    if post.is_hide and not request.user.is_authenticated():
-        return HttpResponseNotFound()
-    return render(request, 'blog/single_post.html', {'post': post})
+# def single_post(request, post_title):
+#     post = get_object_or_404(Post, title=post_title)
+#     if post.is_hide and not request.user.is_authenticated():
+#         return HttpResponseNotFound()
+#     return render(request, 'blog/single_post.html', {'post': post})
+
+
+class SinglePostView(generic.DetailView):
+    model = Post
+    slug_field = 'title'
+    template_name = 'blog/single_post.html'
 
 
 @login_required()
@@ -63,7 +69,7 @@ def new_post(request):
             new = form.save(commit=False)
             new.save()
             form.save_m2m()
-            return redirect('blog:single_post', post_title=new.title)
+            return redirect(reverse('blog:single_post', kwargs={'slug': new.title}))
     else:
         form = EditPostForm()
     return render(request,
@@ -83,7 +89,7 @@ def edit_post(request, post_id):
             edit = form.save(commit=False)
             edit.save()
             form.save_m2m()
-            return redirect('blog:single_post', post_title=post.title)
+            return redirect(reverse('blog:single_post', kwargs={'slug': edit.title}))
     else:
         form = EditPostForm(instance=post)
     return render(request,

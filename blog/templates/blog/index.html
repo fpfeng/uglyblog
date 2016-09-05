@@ -9,7 +9,7 @@
 				{% for p in posts %}
 					{% if not p.is_hide and not user.is_authenticated or user.is_authenticated %}
 						<div class="post-preview">
-							<a href="{% url 'blog:single_post' post_title=p.title %}">
+							<a href="{% url 'blog:single_post' slug=p.title %}">
 								<h2 class="post-title">{{ p.title }}</h2>
 								<h3 class="post-subtitle">{{ p.subtitle }}</h3>
 							</a>

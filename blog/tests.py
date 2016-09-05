@@ -59,19 +59,20 @@ class BaseSetup(TestCase):
                          }, follow=True)
 
     def post_edit_post(self, url, tags, title, content, hide=0):
-        self.client.post(url,
-                         {
-                            'title': title,
-                            'subtitle': u'testsubtitle副标题💪',
-                            'content': content * 10,
-                            'category': self.get_category_id(),
-                            'header_image_url': 'http://exmaple.com/q.jpg',
-                            'tags': tags,
-                            'is_hide': hide
-                         }, follow=True)
+        resp = self.client.post(url,
+                                {
+                                    'title': title,
+                                    'subtitle': u'testsubtitle副标题💪',
+                                    'content': content * 10,
+                                    'category': self.get_category_id(),
+                                    'header_image_url': 'http://exmaple.com/q.jpg',
+                                    'tags': tags,
+                                    'is_hide': hide
+                                }, follow=True)
+        self.assertEquals(resp.status_code, 200)
 
     def get_post_url(self, title):
-        return reverse('blog:single_post', kwargs={'post_title': title})
+        return reverse('blog:single_post', kwargs={'slug': title})
 
     def get_index(self):
         return self.client.get(reverse('blog:index'))

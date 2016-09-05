@@ -3,6 +3,7 @@ product_settings.py
 dev_settings.py
 test_settings.py
 gen_static
+migrations
 
 # celery
 celerybeat-schedule
