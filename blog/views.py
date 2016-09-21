@@ -48,17 +48,17 @@ def index(request):
     return render(request, 'blog/index.html', context)
 
 
-# def single_post(request, post_title):
-#     post = get_object_or_404(Post, title=post_title)
-#     if post.is_hide and not request.user.is_authenticated():
-#         return HttpResponseNotFound()
-#     return render(request, 'blog/single_post.html', {'post': post})
-
-
 class SinglePostView(generic.DetailView):
     model = Post
     slug_field = 'title'
     template_name = 'blog/single_post.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.is_hide and not request.user.is_authenticated():
+            return HttpResponseNotFound()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
 
 @login_required()
