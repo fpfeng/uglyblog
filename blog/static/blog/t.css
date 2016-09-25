@@ -148,7 +148,7 @@ hr.small {
 
 }
 
-@media (max-width: 768px) {
+@media (max-width: 968px) {
   /* override the Affix plugin so that the navigation isn't sticky */
   nav.affix[data-toggle='toc'] {
     position: static;
